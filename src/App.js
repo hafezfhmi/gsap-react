@@ -1,41 +1,93 @@
-import { useRef, useEffect } from "react";
+import React from "react";
+
+import leftArrow from "./assets/arrow-left.svg";
+import rightArrow from "./assets/arrow-right.svg";
+
+import "reset-css";
 import "./App.scss";
-import Person from "./images/person.jpg";
-import CSSRulePlugin from "gsap/CSSRulePlugin";
-import { gsap, Power2 } from "gsap";
+
+const testimonials = [
+  {
+    name: "Julia Cameron",
+    title: "Creative Director, VISA",
+    image: `${require("./assets/image3.jpg")}`,
+    quote:
+      "It's all good. I was amazed at the quality of the Design. We've seen amazing results already.",
+  },
+  {
+    name: "Mark Jacobs",
+    title: "Tech Lead, Google",
+    image: `${require("./assets/image.jpg")}`,
+    quote:
+      "The rebranding has really helped our business. Definitely worth the investment.",
+  },
+  {
+    name: "Lisa Bearings",
+    title: "Brand Coordinator, Facebook",
+    image: `${require("./assets/image2.jpg")}`,
+    quote:
+      "The service was excellent. Absolutely wonderful! A complete redesign did it for us.",
+  },
+];
 
 function App() {
-  let container = useRef(null);
-  let image = useRef(null);
-  let imageReveal = CSSRulePlugin.getRule(".img-container:after");
-
-  /* timeline allows animation chaining */
-  const tl = gsap.timeline();
-
-  useEffect(() => {
-    tl.to(container.current, {
-      duration: 0,
-      css: { visibility: "visible" },
-    })
-      .to(imageReveal, { duration: 1.4, width: "0%", ease: Power2.easeInOut })
-      .from(image.current, {
-        duration: 1.4,
-        scale: 1.6,
-        ease: Power2.easeInOut,
-        delay: -1.6,
-      });
-  });
-
   return (
-    <section className="main">
-      <div className="container" ref={container}>
-        <>
-          <div className="img-container">
-            <img src={Person} alt="person" ref={image} />
+    <div className="testimonial-section">
+      <div className="testimonial-container">
+        <div className="arrow left">
+          <span>
+            <img src={leftArrow} alt="left arrow" />
+          </span>
+        </div>
+
+        <div className="inner">
+          <div className="t-image">
+            <ul>
+              <li>
+                <img src={testimonials[0].image} alt={testimonials[0].name} />
+              </li>
+              <li>
+                <img src={testimonials[1].image} alt={testimonials[1].name} />
+              </li>
+              <li>
+                <img src={testimonials[2].image} alt={testimonials[2].name} />
+              </li>
+            </ul>
           </div>
-        </>
+          <div className="t-content">
+            <ul>
+              <li>
+                <div className="content-inner">
+                  <p className="quote">{testimonials[0].quote}</p>
+                  <h3 className="name">{testimonials[0].name}</h3>
+                  <h4 className="title">{testimonials[0].title}</h4>
+                </div>
+              </li>
+              <li>
+                <div className="content-inner">
+                  <p className="quote">{testimonials[1].quote}</p>
+                  <h3 className="name">{testimonials[1].name}</h3>
+                  <h4 className="title">{testimonials[1].title}</h4>
+                </div>
+              </li>
+              <li>
+                <div className="content-inner">
+                  <p className="quote">{testimonials[2].quote}</p>
+                  <h3 className="name">{testimonials[2].name}</h3>
+                  <h4 className="title">{testimonials[2].title}</h4>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="arrow right">
+          <span>
+            <img src={rightArrow} alt="right arrow" />
+          </span>
+        </div>
       </div>
-    </section>
+    </div>
   );
 }
 
