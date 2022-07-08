@@ -1,109 +1,98 @@
-import React, { useRef, useEffect } from "react";
-import { gsap, Power3 } from "gsap";
+import React, { useRef } from "react";
+import { useIntersection } from "react-use";
+import back from "./left.svg";
+import send from "./send.svg";
+import gsap from "gsap";
 import "./App.scss";
 
-import arrow from "./images/arrow-right.svg";
-import imgGirl from "./images/girl.webp";
-import imgBoy from "./images/boy.webp";
-
 const App = () => {
-  let app = useRef(null);
-  let images = useRef(null);
-  let content = useRef(null);
+  // Ref for our element
+  const sectionRef = useRef(null);
+  // All the ref to be observed
+  const intersection = useIntersection(sectionRef, {
+    root: null,
+    rootMargin: "0px",
+    threshold: 0.2,
+  });
 
-  let tl = gsap.timeline({ delay: 0.8 });
+  // Animation for fading in
+  const fadeIn = (element) => {
+    gsap.to(element, 1, {
+      opacity: 1,
+      y: -60,
+      ease: "power4.out",
+      stagger: {
+        amount: 0.3,
+      },
+    });
+  };
+  // Animation for fading out
+  const fadeOut = (element) => {
+    gsap.to(element, 1, {
+      opacity: 0,
+      y: -20,
+      ease: "power4.out",
+    });
+  };
 
-  useEffect(() => {
-    const girlImage = images.current.firstElementChild;
-    const boyImage = images.current.lastElementChild;
-
-    const headlineFirst = content.current.children[0].children[0];
-    const headlineSecond = headlineFirst.nextSibling;
-    const headlineThird = headlineSecond.nextSibling;
-    const contentP = content.current.children[1];
-    const contentButton = content.current.children[2];
-
-    gsap.to(app.current, { duration: 0, css: { visibility: "visible" } });
-
-    tl.from(girlImage, { duration: 1.2, y: 1280, ease: Power3.easeOut }, 0)
-      .from(
-        girlImage.firstElementChild,
-        { duration: 2, scale: 1.6, ease: Power3.easeInOut },
-        0.2
-      )
-      .from(boyImage, { duration: 1.2, y: 1280, ease: Power3.easeOut }, 0.2)
-      .from(
-        boyImage.firstElementChild,
-        { duration: 2, scale: 1.6, ease: Power3.easeInOut },
-        0.2
-      );
-
-    tl.from(
-      [headlineFirst.children, headlineSecond.children, headlineThird.children],
-      { duration: 1, y: 44, ease: Power3.easeOut, delay: 0.8, stagger: 0.15 },
-      0
-    )
-      .from(
-        contentP,
-        { duration: 1, y: 20, opacity: 0, ease: Power3.easeOut },
-        1.4
-      )
-      .from(
-        contentButton,
-        { duration: 1, y: 20, opacity: 0, ease: Power3.easeOut },
-        1.6
-      );
-  }, [tl]);
+  // checking to see when the vieport is visible to the user
+  intersection && intersection.intersectionRatio < 0.2
+    ? fadeOut(".fadeIn")
+    : fadeIn(".fadeIn");
 
   return (
-    <div className="hero" ref={app}>
-      <div className="container">
-        <div className="hero-inner">
-          <div className="hero-content">
-            <div className="hero-content-inner" ref={content}>
-              <h1>
-                <div className="hero-content-line">
-                  <div className="hero-content-line-inner">
-                    Relieving the burden
-                  </div>
-                </div>
-                <div className="hero-content-line">
-                  <div className="hero-content-line-inner">
-                    of disease caused
-                  </div>
-                </div>
-                <div className="hero-content-line">
-                  <div className="hero-content-line-inner">by behavior.</div>
-                </div>
-              </h1>
-              <p>
-                Better treats serious cardiometabolic diseases to transform
-                lives and reduce healthcare utilization through the use of
-                digital therapeutics.
-              </p>
-              <div className="btn-row">
-                <button className="explore-button">
-                  explore
-                  <div className="arrow-icon">
-                    <img src={arrow} alt="arrow" />
-                  </div>
-                </button>
-              </div>
-            </div>
-          </div>
-          <div className="hero-images">
-            <div className="hero-images-inner" ref={images}>
-              <div className="hero-image girl">
-                <img src={imgGirl} alt="girl" />
-              </div>
-              <div className="hero-image boy">
-                <img src={imgBoy} alt="boy" />
-              </div>
-            </div>
+    <>
+      <div className="header">
+        <div className="sm-btn">
+          <img src={back} alt="back arrow" />
+        </div>
+        <h5>About</h5>
+        <div className="sm-btn">
+          <img src={send} alt="" />
+        </div>
+      </div>
+      <div className="sectionFirst">
+        <div className="pic">
+          <img
+            src="https://cdn.dribbble.com/users/997665/screenshots/9634478/media/8ad68f67fdbfb09bc054937edecf2d27.png"
+            alt=""
+          />
+        </div>
+        <h3>Alara Frank</h3>
+        <p>
+          Massa id neque aliquam vestibulum. Nibh praesent tristique magna sit.
+          Auctor eu augue ut lectus arcu bibendum at varius. Nam aliquam sem et
+          tortor consequat id. Nunc mi ipsum faucibus vitae aliquet nec. Eu
+          consequat ac felis donec et. Vivamus arcu felis bibendum ut tristique.
+          Egestas diam in arcu cursus euismod quis viverra nibh. Donec ac odio
+          tempor orci dapibus ultrices in iaculis. Enim eu turpis egestas
+          pretium.
+        </p>
+      </div>
+      <div className="sectionSecond">
+        <div ref={sectionRef} className="inner">
+          <h3 className="fadeIn">The talk of what makes a champion.</h3>
+          <p className="fadeIn">
+            Massa id neque aliquam vestibulum. Nibh praesent tristique magna
+            sit. Auctor eu augue ut lectus arcu bibendum at varius. Nam aliquam
+            sem et tortor consequat id. Nunc mi ipsum faucibus vitae aliquet
+            nec. Eu consequat ac felis donec et. Vivamus arcu felis bibendum ut
+            tristique. Egestas diam in arcu cursus euismod quis viverra nibh.
+            Donec ac odio tempor orci dapibus ultrices in iaculis. Enim eu
+            turpis egestas pretium. Tortor vitae purus faucibus ornare
+            suspendisse sed nisi lacus sed. Eget nulla facilisi etiam dignissim
+            diam quis enim lobortis. Enim sit amet venenatis urna cursus eget.
+            Tellus id interdum velit laoreet id. Ac odio tempor orci dapibus. Et
+            ultrices neque ornare aenean euismod elementum nisi. Dolor morbi non
+            arcu risus quis. Lectus sit amet est placerat in egestas erat
+            imperdiet. Cum sociis natoque penatibus et magnis dis.
+          </p>
+          <div className="btn-row fadeIn">
+            <a href="/">Click here bruh</a>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
