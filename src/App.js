@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
+import { gsap, Power3 } from "gsap";
 import "./App.scss";
 
 import arrow from "./images/arrow-right.svg";
@@ -6,12 +7,60 @@ import imgGirl from "./images/girl.webp";
 import imgBoy from "./images/boy.webp";
 
 const App = () => {
+  let app = useRef(null);
+  let images = useRef(null);
+  let content = useRef(null);
+
+  let tl = gsap.timeline({ delay: 0.8 });
+
+  useEffect(() => {
+    const girlImage = images.current.firstElementChild;
+    const boyImage = images.current.lastElementChild;
+
+    const headlineFirst = content.current.children[0].children[0];
+    const headlineSecond = headlineFirst.nextSibling;
+    const headlineThird = headlineSecond.nextSibling;
+    const contentP = content.current.children[1];
+    const contentButton = content.current.children[2];
+
+    gsap.to(app.current, { duration: 0, css: { visibility: "visible" } });
+
+    tl.from(girlImage, { duration: 1.2, y: 1280, ease: Power3.easeOut }, 0)
+      .from(
+        girlImage.firstElementChild,
+        { duration: 2, scale: 1.6, ease: Power3.easeInOut },
+        0.2
+      )
+      .from(boyImage, { duration: 1.2, y: 1280, ease: Power3.easeOut }, 0.2)
+      .from(
+        boyImage.firstElementChild,
+        { duration: 2, scale: 1.6, ease: Power3.easeInOut },
+        0.2
+      );
+
+    tl.from(
+      [headlineFirst.children, headlineSecond.children, headlineThird.children],
+      { duration: 1, y: 44, ease: Power3.easeOut, delay: 0.8, stagger: 0.15 },
+      0
+    )
+      .from(
+        contentP,
+        { duration: 1, y: 20, opacity: 0, ease: Power3.easeOut },
+        1.4
+      )
+      .from(
+        contentButton,
+        { duration: 1, y: 20, opacity: 0, ease: Power3.easeOut },
+        1.6
+      );
+  }, [tl]);
+
   return (
-    <div className="hero">
+    <div className="hero" ref={app}>
       <div className="container">
         <div className="hero-inner">
           <div className="hero-content">
-            <div className="hero-content-inner">
+            <div className="hero-content-inner" ref={content}>
               <h1>
                 <div className="hero-content-line">
                   <div className="hero-content-line-inner">
@@ -43,7 +92,7 @@ const App = () => {
             </div>
           </div>
           <div className="hero-images">
-            <div className="hero-images-inner">
+            <div className="hero-images-inner" ref={images}>
               <div className="hero-image girl">
                 <img src={imgGirl} alt="girl" />
               </div>
